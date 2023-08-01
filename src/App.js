@@ -6,14 +6,6 @@ function App() {
 
   const [donations, setDonations] = useState({})
 
-  function getRows() {
-    const rows = []
-    for(const key in donations) {
-      rows.push()
-    }
-   return rows.map(row => row)
-  }
-
   function getDonations(text) {
     const lines = text.split('\n')
     const linesSplitted = []
@@ -27,7 +19,7 @@ function App() {
     }
     const donations = {}
     linesSplitted.map(line => {
-      const value = line.value.replace('.', '')
+      const value = line.value.replaceAll('.', '')
       if (!donations[line.name]) {
         donations[line.name] = {
           value: parseFloat(value)
