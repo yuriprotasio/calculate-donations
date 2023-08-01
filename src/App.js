@@ -1,24 +1,62 @@
 import logo from './logo.svg';
+import React, { useState } from 'react'
 import './App.css';
 
 function App() {
+
+  const [donations, setDonations] = useState({})
+
+  function getRows() {
+    const rows = []
+    for(const key in donations) {
+      rows.push()
+    }
+   return rows.map(row => row)
+  }
+
+  function getDonations(text) {
+    const lines = text.split('\n')
+    const linesSplitted = []
+    for(var i = 0;i < lines.length;i++){
+        const lineSplitted = lines[i].split('\t')
+        if (lineSplitted[3] === 'Donativo') linesSplitted.push({
+          name: lineSplitted[0],
+          value: lineSplitted[2],
+          date: lineSplitted[4]
+        })
+    }
+    const donations = {}
+    linesSplitted.map(line => {
+      const value = line.value.replace('.', '')
+      if (!donations[line.name]) {
+        donations[line.name] = {
+          value: parseFloat(value)
+        }
+      } else {
+        donations[line.name].value += parseFloat(value)
+      }
+    })
+    setDonations(donations)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <textarea placeholder="Cole as doações aqui" onChange={(e) => getDonations(e.target.value)}></textarea>
+    
+      <table>
+        <tr>
+          <th>Nome</th>
+          <th>Valor</th>
+        </tr>
+        {Object.keys(donations).length && Object.keys(donations).map(key => {
+        {console.log('Works', donations)}
+          return <tr>
+          <td>{key}</td>
+          <td>{donations[key].value}</td>
+        </tr>
+        })}
+      </table>
+    </>
   );
 }
 
